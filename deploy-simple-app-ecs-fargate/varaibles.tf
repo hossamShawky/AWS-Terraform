@@ -4,7 +4,9 @@ variable "region" {
 variable "project" {
   default = "demo-fargate"
 }
-
+variable "account_number" {
+  description = "Type Your AccountID,,,,"
+}
 
 variable "cidr_block" {
   default = "10.0.0.0/16"
