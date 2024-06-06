@@ -5,9 +5,8 @@ AccountID="$AccountID"
 
 aws ecr get-login-password --region us-east-1 --profile=test | docker login --username AWS --password-stdin $AccountID.dkr.ecr.us-east-1.amazonaws.com 
 
-docker build -t nginxdemo .
+docker build -t demo-fargate-registry .
 
-docker tag demonginx:latest $AccountID.dkr.ecr.us-east-1.amazonaws.com/demonginx:latest
+docker tag demo-fargate-registry:latest $AccountID.dkr.ecr.us-east-1.amazonaws.com/demo-fargate-registry:latest
 
-docker push $AccountID.dkr.ecr.us-east-1.amazonaws.com/demonginx:latest
-
+docker push $AccountID.dkr.ecr.us-east-1.amazonaws.com/demo-fargate-registry:latest
