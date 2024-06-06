@@ -11,3 +11,6 @@ variable "account_number" {
 variable "cidr_block" {
   default = "10.0.0.0/16"
 }
+variable "desired_count" {
+  default = 2
+}
