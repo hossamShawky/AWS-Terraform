@@ -63,6 +63,15 @@ resource "aws_iam_policy_attachment" "lambda_dynamodb_attach" {
   policy_arn = aws_iam_policy.dynamodb_access_policy.arn
 }
 
+
+
+##ZIP CODE
+
+resource "null_resource" "zip_code" {
+  provisioner "local-exec" {
+    command = " cd lambda/ &&  zip -r ./main.zip ."
+  }
+}
 #3- Create Lambda
 resource "aws_lambda_function" "my_lambda" {
   filename         = "${path.module}/lambda/main.zip"

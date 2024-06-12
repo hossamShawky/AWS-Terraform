@@ -70,3 +70,13 @@ def delete_item(item_id):
         return {'statusCode': 204, 'body': None}
     except Exception as e:
         return {'statusCode': 500, 'body': json.dumps({'message': str(e)})}
+    
+
+# import json
+
+# def lambda_handler(event, context):
+#     # TODO implement
+#     return {
+#         'statusCode': 200,
+#         'body': json.dumps('Hello from Lambda!HOSSAM')
+#     }
