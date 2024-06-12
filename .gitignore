@@ -32,3 +32,11 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+aws-api-labmbda/lambda/*dat*
+aws-api-labmbda/lambda/*jmes*
+aws-api-labmbda/lambda/*s3*
+aws-api-labmbda/lambda/*bot*
+aws-api-labmbda/lambda/*bin*
+aws-api-labmbda/lambda/*__py*
+aws-api-labmbda/lambda/*six*
+aws-api-labmbda/lambda/*urllib*

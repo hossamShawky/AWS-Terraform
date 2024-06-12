@@ -64,8 +64,6 @@ resource "aws_iam_policy_attachment" "lambda_dynamodb_attach" {
 }
 
 
-
-
 #3- Create Lambda
 resource "aws_lambda_function" "my_lambda" {
   filename         = "${path.module}/lambda/main.zip"
@@ -75,3 +73,11 @@ resource "aws_lambda_function" "my_lambda" {
   source_code_hash = filebase64sha256("${path.module}/lambda/main.zip")
   runtime          = "python3.9"
 }
+
+#4- Create API
+resource "aws_api_gateway_rest_api" "my_api" {
+  name        = "${var.project}-API"
+  description = "My API Gateway To Invoke BackEnd Lambda"
+  depends_on  = [aws_lambda_function.my_lambda]
+}
+
