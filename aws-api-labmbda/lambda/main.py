@@ -3,7 +3,7 @@ import boto3
 from boto3.dynamodb.conditions import Key
 
 dynamodb = boto3.resource('dynamodb')
-table_name = 'ItemsTable'
+table_name = 'apigateway-table'
 table = dynamodb.Table(table_name)
 
 def lambda_handler(event, context):
