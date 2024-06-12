@@ -11,5 +11,5 @@ output "alb_dns_name" {
 
 # Output ECS service details
 output "ecs_service_details" {
-  value = aws_ecs_service.my_service
+  value = aws_ecs_service.my_alb_service
 }
