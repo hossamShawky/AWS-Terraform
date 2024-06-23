@@ -11,3 +11,6 @@ variable "user_bucket" {
 variable "lambda_runtime" {
   default = "python3.9"
 }
+variable "stage_name" {
+  default = "prod"
+}
