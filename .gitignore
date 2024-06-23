@@ -40,3 +40,5 @@ aws-api-labmbda/lambda/*bin*
 aws-api-labmbda/lambda/*__py*
 aws-api-labmbda/lambda/*six*
 aws-api-labmbda/lambda/*urllib*
+notes
+*zip*
