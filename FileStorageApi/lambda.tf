@@ -17,14 +17,13 @@ resource "aws_iam_role" "lambda_execution" {
     ]
   }
   EOF
-  depends_on         = [aws_s3_bucket.user_content_bucket]
 }
 ##Policy
 # Creating S3 policy for Lambda functiion role to get and put objects to S3 buck
 data "aws_iam_policy_document" "lambda_policy_document" {
   statement {
     effect  = "Allow"
-    actions = ["s3:ListBucket", "s3:GetObject", "s3:PutObject", "s3:CopyObject,logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"]
+    actions = ["s3:ListBucket", "s3:GetObject", "s3:PutObject", "s3:CopyObject", "logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"]
     resources = ["arn:aws:s3:::${aws_s3_bucket.user_content_bucket.bucket}/*",
     "arn:aws:s3:::${aws_s3_bucket.user_content_bucket.bucket}"]
   }

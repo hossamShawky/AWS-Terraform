@@ -2,7 +2,9 @@
 
 ### 
 resource "aws_api_gateway_rest_api" "FileUploderService" {
-  name = "${var.project}-API"
+  name       = "${var.project}-API"
+  depends_on = [aws_s3_bucket.user_content_bucket, aws_lambda_function.file_uploader_lambda]
+
 }
 
 resource "aws_api_gateway_resource" "FileUploderService" {
@@ -20,9 +22,9 @@ resource "aws_api_gateway_method" "FileUploderService" {
 }
 
 resource "aws_api_gateway_integration" "FileUploderService" {
-  http_method = aws_api_gateway_method.FileUploderService.http_method
-  resource_id = aws_api_gateway_resource.FileUploderService.id
-  rest_api_id = aws_api_gateway_rest_api.FileUploderService.id
+  http_method             = aws_api_gateway_method.FileUploderService.http_method
+  resource_id             = aws_api_gateway_resource.FileUploderService.id
+  rest_api_id             = aws_api_gateway_rest_api.FileUploderService.id
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.file_uploader_lambda.invoke_arn
@@ -45,7 +47,7 @@ resource "aws_api_gateway_method_response" "FileUploderService" {
   }
 
   response_parameters = {
-    "method.response.header.Access-Control-Allow-Origin" = true,
+    "method.response.header.Access-Control-Allow-Origin"  = true,
     "method.response.header.Access-Control-Allow-Headers" = true,
     "method.response.header.Access-Control-Allow-Methods" = true
   }
@@ -71,7 +73,7 @@ resource "aws_api_gateway_deployment" "FileUploderService" {
 resource "aws_api_gateway_stage" "prod" {
   deployment_id = aws_api_gateway_deployment.FileUploderService.id
   rest_api_id   = aws_api_gateway_rest_api.FileUploderService.id
-  stage_name    = "${var.stage_name}"
+  stage_name    = var.stage_name
 }
 
 # Permission for API Gateway to invoke lambda function
@@ -80,5 +82,5 @@ resource "aws_lambda_permission" "apigw_lambda" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.file_uploader_lambda.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn = "${aws_api_gateway_rest_api.FileUploderService.execution_arn}/*/${aws_api_gateway_method.FileUploderService.http_method}${aws_api_gateway_resource.FileUploderService.path}"
+  source_arn    = "${aws_api_gateway_rest_api.FileUploderService.execution_arn}/*/${aws_api_gateway_method.FileUploderService.http_method}${aws_api_gateway_resource.FileUploderService.path}"
 }    

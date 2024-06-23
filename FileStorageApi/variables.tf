@@ -5,7 +5,7 @@ variable "project" {
   default = "cloud_filestorage"
 }
 variable "user_bucket" {
-  default = "userBucket-s3"
+  default = "userapibuckets3"
 }
 
 variable "lambda_runtime" {
