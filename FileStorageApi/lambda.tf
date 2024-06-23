@@ -17,6 +17,7 @@ resource "aws_iam_role" "lambda_execution" {
     ]
   }
   EOF
+  depends_on         = [aws_s3_bucket.user_content_bucket]
 }
 ##Policy
 # Creating S3 policy for Lambda functiion role to get and put objects to S3 buck
@@ -36,4 +37,34 @@ resource "aws_iam_policy" "lambda_policy" {
 resource "aws_iam_role_policy_attachment" "lambda_role_policy" {
   policy_arn = aws_iam_policy.lambda_policy.arn
   role       = aws_iam_role.lambda_execution.name
+}
+
+#Creating the Lambda function using data resource
+locals {
+  lambda_src_dir           = "${path.module}/lambdacode/"
+  lambda_function_zip_path = "${path.module}/lambdacode/lambda_function.zip"
+}
+
+data "archive_file" "lambda" {
+  source_dir  = local.lambda_src_dir
+  output_path = local.lambda_function_zip_path
+  type        = "zip"
+}
+
+resource "aws_lambda_function" "file_uploader_lambda" {
+  filename         = local.lambda_function_zip_path
+  function_name    = "${var.project}-lambdaFunction"
+  role             = aws_iam_role.lambda_execution.arn
+  handler          = "lambda_function.lambda_handler"
+  runtime          = var.lambda_runtime
+  timeout          = 25
+  memory_size      = 128
+  source_code_hash = data.archive_file.lambda.output_base64sha256
+
+  environment {
+    variables = {
+      BUCKET_NAME = aws_s3_bucket.user_content_bucket.bucket,
+    }
+  }
+
 }
