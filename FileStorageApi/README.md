@@ -62,6 +62,14 @@ curl -X POST -H "Content-Type: application/octet-stream" -T pathtofile   'APIURL
 ![alt](images/usage-1.png)
 ![alt](images/checks3-1.png)
 
+
+#### _Using WebSite_
+![alt](images/apply.png)
+
+![alt](images/websites3.png)
+![alt](images/upload.png)
+![alt](images/check.png)
+
 ### Cleanup
 To avoid ongoing charges, delete the resources created for the demo:
 
