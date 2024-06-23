@@ -42,7 +42,7 @@ resource "aws_iam_role_policy_attachment" "lambda_role_policy" {
 #Creating the Lambda function using data resource
 locals {
   lambda_src_dir           = "${path.module}/lambdacode/"
-  lambda_function_zip_path = "${path.module}/lambdacode/lambda_function.zip"
+  lambda_function_zip_path = "${path.module}/lambda_function.zip"
 }
 
 data "archive_file" "lambda" {
