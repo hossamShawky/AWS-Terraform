@@ -3,5 +3,5 @@ output "user_content_bucket" {
 }
 
 output "api_gateway_url" {
-  value = "${aws_api_gateway_deployment.FileUploderService.invoke_url}/upload/"
+  value = "${aws_api_gateway_deployment.FileUploderService.invoke_url}upload/"
 }
