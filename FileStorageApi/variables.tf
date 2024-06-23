@@ -14,3 +14,8 @@ variable "lambda_runtime" {
 variable "stage_name" {
   default = "prod"
 }
+
+variable "web_bucket" {
+  default = "webapibuckets3"
+
+}
