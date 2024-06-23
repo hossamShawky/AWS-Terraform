@@ -30,8 +30,8 @@
 Clone the repository:
 
 ```bash
-git clone <repository-url>
-cd <repository-name>
+git clone https://github.com/hossamShawky/AWS-Terraform.git
+cd AWS-Terraform/FileStorageApi
 ```
 
 
