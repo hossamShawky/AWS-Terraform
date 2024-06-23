@@ -7,3 +7,7 @@ variable "project" {
 variable "user_bucket" {
   default = "userBucket-s3"
 }
+
+variable "lambda_runtime" {
+  default = "python3.9"
+}
