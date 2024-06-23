@@ -29,7 +29,7 @@ function uploadFile(event) {
   const file = fileInput.files[0];
 
   //const apiUrl = 'https://<id>.execute-api.us-east-1.amazonaws.com/dev/upload' // API Gateway 
-  const apiUrl = 'https://deov8gwhrd.execute-api.us-east-1.amazonaws.com/prod/upload'
+  const apiUrl = "https://ugko7o11q0.execute-api.us-east-1.amazonaws.com/prod/upload"
 
   const formData = new FormData();
   formData.append('file', file);

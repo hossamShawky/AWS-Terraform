@@ -84,4 +84,28 @@ resource "aws_lambda_permission" "apigw_lambda" {
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_api_gateway_rest_api.FileUploderService.execution_arn}/*/*"
   #${aws_api_gateway_method.FileUploderService.http_method}${aws_api_gateway_resource.FileUploderService.path}"
-}    
+}
+
+
+
+### Print API url into app.js
+
+locals {
+
+  apiGateWayUrl = "${aws_api_gateway_deployment.FileUploderService.invoke_url}prod/upload"
+}
+
+resource "null_resource" "replace_apiUrl" {
+  provisioner "local-exec" {
+    command = "sed -i 's#apiGateWayUrl#\"${local.apiGateWayUrl}\"#g' ${path.module}/website/app.js "
+  }
+}
+
+
+resource "null_resource" "cp_website_to_s3" {
+
+  provisioner "local-exec" {
+    command = "aws s3 cp ${path.module}/website/ s3://${aws_s3_bucket.file_uploader_app_bucket.bucket} --recursive  --profile demos"
+  }
+  depends_on = [null_resource.replace_apiUrl]
+}
