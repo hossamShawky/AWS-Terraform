@@ -11,6 +11,17 @@ resource "aws_dynamodb_table" "Dynamodb" {
   }
 }
 
+
+# DynamoDB table item
+resource "aws_dynamodb_table_item" "initial_user" {
+  table_name = aws_dynamodb_table.Dynamodb.name
+  hash_key   = "id"
+
+  item = jsonencode({
+    id = { S = "item-1" },
+  })
+}
+
 #-2 Create Role For Lambda
 resource "aws_iam_role" "lambda_execution" {
   name               = "lambda_execution_role"
