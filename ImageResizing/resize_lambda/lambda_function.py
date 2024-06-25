@@ -22,7 +22,7 @@ def resize_image(image_path, resized_path, sns_client):
 
     
     
-def handler(event, context):
+def lambda_handler(event, context):
     Topic_Arn = os.environ['TOPIC_ARN']
     S3_Bucket = os.environ['RESIZED_BUCKET']
     for record in event['Records']:

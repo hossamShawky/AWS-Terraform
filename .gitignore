@@ -41,5 +41,16 @@ aws-api-labmbda/lambda/*__py*
 aws-api-labmbda/lambda/*six*
 aws-api-labmbda/lambda/*urllib*
 notes
-*zip*
+zip
 *csv
+ImageResizing/resize_lambda/*PI*
+ImageResizing/resize_lambda/*pi*
+
+ImageResizing/resize_lambda/*bin*
+ImageResizing/resize_lambda/*boto*
+ImageResizing/resize_lambda/*dat*
+ImageResizing/resize_lambda/*jm*
+ImageResizing/resize_lambda/*__*
+ImageResizing/resize_lambda/*s3*
+ImageResizing/resize_lambda/*si*
+ImageResizing/resize_lambda/*urll*
