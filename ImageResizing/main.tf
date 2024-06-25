@@ -22,7 +22,7 @@ module "Resized3" {
 
 ##4- IAM Role For Lambda
 
-module "IAM" {
+module "Lambda" {
   source         = "./lambda"
   sns_arn        = module.SNS.sns_arn
   depends_on     = [module.SNS]
