@@ -79,6 +79,9 @@ aws s3 cp /tmp/bigimg.jpeg s3://o72kf-main/ --profile demos
 
 ![alt](images/resized_img.png)
 
+*SNS Topic*
+
+![alt](images/testsns.jpeg)
 
 ### Cleanup
 To avoid ongoing charges, delete the resources created for the demo:
