@@ -21,7 +21,7 @@ resource "aws_iam_role" "lambda_execution" {
 
 # Creating S3 policy for Lambda functiion role to get and put objects to S3 buck
 # Creating S3 policy for Lambda functiion role to get and put objects to S3 buck
-resource "aws_iam_policy" "auth_lambda_policy" {
+resource "aws_iam_policy" "lambda_policy" {
   name        = "auth_lambda_policy"
   description = "IAM policy for Lambda to access Logs and S3"
   policy = jsonencode({
@@ -66,3 +66,8 @@ resource "aws_iam_policy" "auth_lambda_policy" {
   })
 }
 
+
+resource "aws_iam_role_policy_attachment" "lambda_role_policy" {
+  policy_arn = aws_iam_policy.lambda_policy.arn
+  role       = aws_iam_role.lambda_execution.name
+}
