@@ -1,7 +1,7 @@
 #Create IAM Role To Allow Lambda Access To get,putObjects/Logs
 
 resource "aws_iam_role" "lambda_execution" {
-  name               = "lambda_execution_role"
+  name               = "${var.project}-lambda_execution_role"
   assume_role_policy = <<EOF
   {
     "Version": "2012-10-17",
@@ -22,7 +22,7 @@ resource "aws_iam_role" "lambda_execution" {
 # Creating S3 policy for Lambda functiion role to get and put objects to S3 buck
 # Creating S3 policy for Lambda functiion role to get and put objects to S3 buck
 resource "aws_iam_policy" "lambda_policy" {
-  name        = "auth_lambda_policy"
+  name        = "${var.project}-lambda_policy"
   description = "IAM policy for Lambda to access Logs and S3"
   policy = jsonencode({
     Version = "2012-10-17"

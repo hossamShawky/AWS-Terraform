@@ -28,5 +28,6 @@ module "IAM" {
   depends_on     = [module.SNS]
   main_bucket    = module.MainS3.bucket_name
   resized_bucket = module.Resized3.bucket_name
+  project        = var.project
 
 }
