@@ -19,3 +19,14 @@ module "Resized3" {
   project = var.project
   type    = "resized"
 }
+
+##4- IAM Role For Lambda
+
+module "IAM" {
+  source         = "./lambda"
+  sns_arn        = module.SNS.sns_arn
+  depends_on     = [module.SNS]
+  main_bucket    = module.MainS3.bucket_name
+  resized_bucket = module.Resized3.bucket_name
+
+}

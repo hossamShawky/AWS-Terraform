@@ -1,5 +1,5 @@
-output "sns" {
-  value = module.SNS.sns_name
+output "sns_arn" {
+  value = module.SNS.sns_arn
 }
 
 output "MainS3" {
