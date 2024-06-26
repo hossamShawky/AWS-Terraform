@@ -109,11 +109,16 @@ resource "null_resource" "zip_code" {
 #3- Create Lambda
 resource "aws_lambda_function" "my_lambda" {
   filename         = "${path.module}/lambda/main.zip"
-  function_name    = "my_lambda_function"
+  function_name    = "${var.project}-lambdafunction"
   role             = aws_iam_role.lambda_execution.arn
   handler          = "main.lambda_handler"
   source_code_hash = filebase64sha256("${path.module}/lambda/main.zip")
-  runtime          = "python3.9"
+  runtime          = var.runtime
+  environment {
+    variables = {
+      Table_Name = aws_dynamodb_table.Dynamodb.name
+    }
+  }
 }
 
 #4- Create API
@@ -140,6 +145,7 @@ resource "aws_api_gateway_resource" "status" {
   rest_api_id = aws_api_gateway_rest_api.my_api.id
   parent_id   = aws_api_gateway_rest_api.my_api.root_resource_id
   path_part   = "status"
+
 }
 
 

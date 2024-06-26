@@ -1,12 +1,14 @@
 import json
 import boto3
+import os
 from botocore.exceptions import ClientError
 from decimal import Decimal
 from boto3.dynamodb.conditions import Key
 
 # Initialize the DynamoDB client
 dynamodb = boto3.resource('dynamodb', region_name='us-east-1')
-dynamodb_table = dynamodb.Table('apigateway-table')
+table_name = os.environ.get('Table_Name')
+dynamodb_table = dynamodb.Table(table_name)
 
 status_check_path = '/status'
 item_path = '/item'

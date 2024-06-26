@@ -5,3 +5,6 @@ variable "project" {
   default = "apigateway"
 }
 
+variable "runtime" {
+  default = "python3.9"
+}
