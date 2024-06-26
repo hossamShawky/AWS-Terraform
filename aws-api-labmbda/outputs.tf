@@ -7,5 +7,5 @@ output "lambda_function_name" {
 }
 
 output "api_gateway_url" {
-  value = "${aws_api_gateway_deployment.my_deployment.invoke_url}/resource/"
+  value = "${aws_api_gateway_deployment.my_deployment.invoke_url}/items/"
 }
