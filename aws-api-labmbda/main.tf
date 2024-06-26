@@ -13,6 +13,10 @@ resource "aws_dynamodb_table" "Dynamodb" {
     name = "name"
     type = "S"
   }
+  attribute {
+    name = "name"
+    type = "S"
+  }
   global_secondary_index {
     name            = "NameIndex"
     hash_key        = "name"
