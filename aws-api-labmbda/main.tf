@@ -9,6 +9,15 @@ resource "aws_dynamodb_table" "Dynamodb" {
     name = "id"
     type = "S"
   }
+  attribute {
+    name = "name"
+    type = "S"
+  }
+  global_secondary_index {
+    name            = "NameIndex"
+    hash_key        = "name"
+    projection_type = "ALL"
+  }
 }
 
 
@@ -18,7 +27,9 @@ resource "aws_dynamodb_table_item" "initial_user" {
   hash_key   = "id"
 
   item = jsonencode({
-    id = { S = "item-1" },
+    id   = { S = "1" },
+    name = { S = "user1" }
+
   })
 }
 
