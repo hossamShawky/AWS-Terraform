@@ -46,7 +46,9 @@ resource "aws_instance" "EC2" {
     volume_type           = "gp3" # default is gp2
     encrypted             = true
   }
-
+  lifecycle {
+    create_before_destroy = true
+  }
   depends_on = [data.aws_ami.ubuntu_img, aws_key_pair.KeyPair]
 }
 

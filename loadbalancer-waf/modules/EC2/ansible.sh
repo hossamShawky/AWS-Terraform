@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd ./ansible
+cd ./modules/EC2/ansible
 
 sleep 25
 
