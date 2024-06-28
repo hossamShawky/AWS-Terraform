@@ -17,13 +17,24 @@ module "Public_Subnets" {
   cidrs              = ["12.0.1.0/24", "12.0.2.0/24"]
   availability_zones = ["us-east-1a", "us-east-1b"]
   type               = "public"
-
+  depends_on         = [module.VPC]
 }
 
 #SG
 
 module "SG" {
-  source  = "./modules/SG"
-  vpc_id  = module.VPC.vpc_id
-  project = var.project
+  source     = "./modules/SG"
+  vpc_id     = module.VPC.vpc_id
+  project    = var.project
+  depends_on = [module.Public_Subnets]
+}
+
+#EC2s
+
+module "EC2" {
+  source         = "./modules/EC2"
+  security_group = module.SG.security_group
+  subnets        = module.Public_Subnets.subnets
+  project        = var.project
+  depends_on     = [module.Public_Subnets, module.SG]
 }
