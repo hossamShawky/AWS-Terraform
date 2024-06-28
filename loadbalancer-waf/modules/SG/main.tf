@@ -3,6 +3,7 @@
 resource "aws_security_group" "web_sg" {
   vpc_id      = var.vpc_id
   description = "Allow HTTP/S,SSH Traffic"
+  name        = "${var.project}-WebSG"
   tags = {
     "Name" = "${var.project}-WebSG"
   }
@@ -13,7 +14,7 @@ resource "aws_security_group" "web_sg" {
     cidr_blocks = ["0.0.0.0/0"]
 
   }
-  egress {
+  ingress {
     to_port     = "22"
     from_port   = "22"
     protocol    = "tcp"
