@@ -56,3 +56,4 @@ ImageResizing/resize_lambda/*si*
 ImageResizing/resize_lambda/*urll*
 
 *lb_waf*
+*.vscode/*

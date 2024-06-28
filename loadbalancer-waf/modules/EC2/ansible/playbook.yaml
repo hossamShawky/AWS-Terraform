@@ -1,0 +1,32 @@
+ - name: Nginx-PalyBook
+   hosts: web
+   gather_facts: false 
+   vars:
+    state: "present"
+   tasks:
+     
+ 
+    - name: update-cache-task  
+      apt:
+       update_cache: true
+    - name: install-nginx
+      apt:
+       name: nginx
+       state: "{{state}}"
+    - name: start-nginx
+      service: 
+       name: nginx
+       state: restarted
+
+    - name: Copy Index Page 
+      template:
+       src: ./index.html.j2
+       dest: /var/www/html/index.html
+      notify: Restart-Nginx
+      
+
+   handlers:
+     - name: Restart-Nginx
+       service:
+         name: nginx
+         state: reloaded
