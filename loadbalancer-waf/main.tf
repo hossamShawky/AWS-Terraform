@@ -51,3 +51,12 @@ module "LB" {
   project         = var.project
   depends_on      = [module.EC2]
 }
+
+#WAF
+module "WAF" {
+  source  = "./modules/WAF"
+  project = var.project
+  lb_arn  = module.LB.lb_arn
+}
+
+
