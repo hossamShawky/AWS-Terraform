@@ -19,3 +19,11 @@ module "Public_Subnets" {
   type               = "public"
 
 }
+
+#SG
+
+module "SG" {
+  source  = "./modules/SG"
+  vpc_id  = module.VPC.vpc_id
+  project = var.project
+}
