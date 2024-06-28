@@ -38,3 +38,16 @@ module "EC2" {
   project        = var.project
   depends_on     = [module.Public_Subnets, module.SG]
 }
+
+
+#LB
+
+module "LB" {
+  source          = "./modules/LB"
+  vpc_id          = module.VPC.vpc_id
+  lb_security_gps = module.SG.lb_security_group
+  ec2s_ids        = module.EC2.ec2s_ids
+  lb_subnets      = module.Public_Subnets.subnets
+  project         = var.project
+  depends_on      = [module.EC2]
+}
