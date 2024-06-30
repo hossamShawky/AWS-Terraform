@@ -13,3 +13,12 @@ resource "aws_internet_gateway" "jenkins_igw" {
     "Name" = "${var.project}-igw"
   }
 }
+
+resource "aws_subnet" "jenkins_subnet" {
+  vpc_id     = aws_vpc.jenkins_vpc.id
+  cidr_block = var.subnet_cidr
+  tags = {
+    "Name" = "${var.project}-public-subnet"
+  }
+  map_public_ip_on_launch = true
+}

@@ -9,5 +9,8 @@ variable "type" {
 }
 
 variable "cidr_block" {
-
+  default = "20.0.0.0/16"
+}
+variable "subnet_cidr" {
+  default = "20.0.2.0/24"
 }
