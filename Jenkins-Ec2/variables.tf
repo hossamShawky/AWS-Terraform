@@ -14,3 +14,9 @@ variable "cidr_block" {
 variable "subnet_cidr" {
   default = "20.0.2.0/24"
 }
+variable "key_name" {
+  default = "mykey"
+}
+variable "ami" {
+  default = "ami-04b70fa74e45c3917"
+}
