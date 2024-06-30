@@ -46,7 +46,7 @@ resource "aws_security_group" "jenkins_security_group" {
     to_port     = 8080
     from_port   = 8080
     cidr_blocks = ["0.0.0.0/0"]
-    protocol    = "HTTP"
+    protocol    = "tcp"
   }
   ingress {
     from_port   = 22
