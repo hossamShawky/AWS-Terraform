@@ -1,0 +1,6 @@
+ - name: PalyBook-1
+   hosts: jenkins
+   tasks:
+
+    - name: Ping
+      ping:
