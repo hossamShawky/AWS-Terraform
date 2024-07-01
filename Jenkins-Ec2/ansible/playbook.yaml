@@ -1,6 +1,58 @@
- - name: PalyBook-1
+ - name: Install-Jenkins
    hosts: jenkins
+   gather_facts: false
    tasks:
 
-    - name: Ping
-      ping:
+    - name: Update
+      apt:
+       update_cache: true
+    
+    - name: Install Java
+      apt:
+        name: openjdk-11-jdk
+        state: present
+    - name: Remove existing Jenkins repo configuration
+      file:
+        path: /etc/apt/sources.list.d/jenkins.list
+        state: absent
+      ignore_errors: yes
+
+    - name: Add Jenkins repository key
+      shell: |
+       wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add - 
+       sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+
+     
+    - name: Add Jenkins repository
+      shell: |
+       sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 5BA31D57EF5975CA
+
+    - name: Update package cache after adding Jenkins repo
+      apt:
+        update_cache: yes
+
+    - name: Install Jenkins package
+      apt:
+        name: jenkins
+        state: "{{ state }}"
+
+    - name: Start and enable Jenkins service
+      service:
+        name: jenkins
+        state: started
+        enabled: yes        
+
+    - name:  Get initialAdminPassword
+      shell: |
+       cat /var/lib/jenkins/secrets/initialAdminPassword
+      register:   jenkins_initial_password
+
+    - name: Print Jenkins initial admin password
+      debug:
+        msg: "initialAdminPasswordis: {{ jenkins_initial_password.stdout }}"
+
+   handlers:
+    - name: restart jenkins
+      service:
+        name: jenkins
+        state: restarted           

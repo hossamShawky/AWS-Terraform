@@ -11,7 +11,7 @@ resource "aws_instance" "jenkins_instance" {
     encrypted             = true
   }
   provisioner "local-exec" {
-    command = " rm ./ansible/inventory && echo '[jenkins]' > ./ansible/inventory && echo '${aws_instance.jenkins_instance.public_ip} state=latest' >> ./ansible/inventory"
+    command = " rm ./ansible/inventory && echo '[jenkins]' > ./ansible/inventory && echo '${aws_instance.jenkins_instance.public_ip} state=present' >> ./ansible/inventory"
   }
 
   tags = {
