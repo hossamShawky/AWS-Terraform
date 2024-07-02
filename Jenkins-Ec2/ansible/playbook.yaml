@@ -21,7 +21,6 @@
       shell: |
        wget -q -O - https://pkg.jenkins.io/debian/jenkins.io.key | sudo apt-key add - 
        sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
-
      
     - name: Add Jenkins repository
       shell: |
@@ -42,17 +41,61 @@
         state: started
         enabled: yes        
 
+    - name: Wait for Jenkins to start up
+      wait_for:
+        port: 8080
+        host: localhost
+        delay: 30
+        timeout: 300
+
     - name:  Get initialAdminPassword
       shell: |
        cat /var/lib/jenkins/secrets/initialAdminPassword
       register:   jenkins_initial_password
+      ignore_errors: true
 
     - name: Print Jenkins initial admin password
       debug:
         msg: "initialAdminPasswordis: {{ jenkins_initial_password.stdout }}"
 
    handlers:
-    - name: restart jenkins
+    - name: restart_jenkins
       service:
         name: jenkins
         state: restarted           
+
+
+
+ - name: Install-Docker
+   hosts: jenkins
+   gather_facts: false
+   tasks:
+       
+    - name: Update
+      apt:
+       update_cache: true
+    
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: "{{state}}"
+
+    - name: Start and enable Docker service
+      systemd:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Add jenkins user to the docker group
+      command: sudo usermod -aG docker jenkins
+
+    - name: Add ubuntu to the docker group
+      user:
+        name: ubuntu
+        groups: docker
+        append: yes
+
+    - name: Restart Docker to apply group changes
+      systemd:
+        name: docker
+        state: restarted
