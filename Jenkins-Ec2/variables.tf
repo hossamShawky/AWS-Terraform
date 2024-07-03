@@ -5,7 +5,7 @@ variable "project" {
   default = "jenkins"
 }
 variable "type" {
-  default = "t2.micro"
+  default = "t3.small"
 }
 
 variable "cidr_block" {
