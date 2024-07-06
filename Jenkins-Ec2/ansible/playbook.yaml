@@ -105,16 +105,4 @@
         name: kubectl
         classic: yes
         state: "{{ state }}"
-
-
-    - name: Add jenkins user to the kube group
-      user:
-        name: jenkins
-        groups: kube
-        append: yes
-
-    - name: Add ubuntu user to the kube group
-      user:
-        name: ubuntu
-        groups: kube
-        append: yes    
+ 
