@@ -17,6 +17,7 @@ resource "aws_internet_gateway" "jenkins_igw" {
 resource "aws_subnet" "jenkins_subnet" {
   vpc_id     = aws_vpc.jenkins_vpc.id
   cidr_block = var.subnet_cidr
+  availability_zone = "us-east-1a"
   tags = {
     "Name" = "${var.project}-public-subnet"
   }
