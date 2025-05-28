@@ -37,6 +37,14 @@ resource "aws_iam_role" "task_execution_role" {
         Principal = {
           Service = "ecs-tasks.amazonaws.com"
         }
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "logs:CreateLogStream",
+          "logs:PutLogEvents"
+        ]
+        Resource = "*"
       }
     ]
   })
@@ -45,6 +53,15 @@ resource "aws_iam_role" "task_execution_role" {
     "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
     "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   ]
+}
+
+# CloudWatch Log Group with Retention Period
+resource "aws_cloudwatch_log_group" "ecs_logs" {
+  name              = "/ecs/${var.project}-logs"
+  retention_in_days = 1 # Set retention period (e.g., 1 days)
+  tags = {
+    Project = var.project
+  }
 }
 
 #Task Definition
@@ -69,20 +86,59 @@ resource "aws_ecs_task_definition" "task_definition" {
           hostPort      = 80
         }
       ]
+
+      # Environment Variables (direct key-value pairs)
+      environment = [
+        {
+          name  = "ENVIRONMENT"
+          value = "development"
+        },
+        {
+          name  = "DEBUG"
+          value = "false"
+        }
+      ]
+      # Environment File (stored in S3)
+      environmentFiles = [
+        {
+          value = "arn:aws:s3:::my-bucket/my-app.env"
+          type  = "s3"
+        }
+      ]
+      #LOGs
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-group"         = "/ecs/${var.project}-logs"
+          "awslogs-region"        = var.region
+          "awslogs-stream-prefix" = "my-app"
+          # "awslogs-create-group"  = "true" # Automatically creates the log group
+        }
+      }
+        # Health Check Configuration
+      healthCheck = {
+        command = ["CMD-SHELL", "curl -f http://localhost:80/health || exit 1"]
+        interval = 30
+        timeout = 5
+        retries = 3
+        startPeriod = 60
+      }
+
     }
   ])
 }
 
+
 # Create Security Group
 resource "aws_security_group" "fargate_sg" {
   name        = "${var.project}-fargate-sg"
-  description = "Allow HTTP inbound traffic"
+  description = "Allow HTTP inbound traffic from same cidr only"
   vpc_id      = aws_vpc.vpc.id
   ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["10.0.0.0/16"]
   }
 
   egress {
@@ -93,6 +149,29 @@ resource "aws_security_group" "fargate_sg" {
   }
   tags = {
     "Name" = "${var.project}-fargate-sg"
+  }
+}
+
+# Create Security Group
+resource "aws_security_group" "alb_sg" {
+  name        = "${var.project}-alb-sg"
+  description = "Allow HTTP inbound traffic"
+  vpc_id      = aws_vpc.vpc.id
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # egress {
+  #   from_port   = 0
+  #   to_port     = 0
+  #   protocol    = "-1"
+  #   cidr_blocks = ["0.0.0.0/0"]
+  # }
+  tags = {
+    "Name" = "${var.project}-alb-sg"
   }
 }
 
@@ -121,7 +200,7 @@ resource "aws_lb" "my_alb" {
   name               = "${var.project}-fargate-alb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.fargate_sg.id]
+  security_groups    = [aws_security_group.alb_sg.id]
   subnets            = [aws_subnet.subnet.id, aws_subnet.subnet2.id] # Replace with your subnet ID
 }
 
@@ -166,7 +245,7 @@ resource "aws_ecs_service" "my_alb_service" {
   network_configuration {
     subnets          = [aws_subnet.subnet.id, aws_subnet.subnet2.id] # Replace with your subnet ID
     security_groups  = [aws_security_group.fargate_sg.id]
-    assign_public_ip = true
+    assign_public_ip = false
   }
 
   load_balancer {
